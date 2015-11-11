@@ -7,23 +7,40 @@ var server = http.createServer(
 	   dispatch({
 
 	     '/' : function (request,response){
+	     	message = {
+           type: 'customer',
+           text: 'hi how are you'
 
-	    console.log('visiting %s', request.url);
-	    response.end('this is root');
 
-	     },
-	     '/movies' : function (request,response){
+	     	};
 
-	    console.log('visiting %s', request.url);
-	    response.end('this is the movies path');
+	    // console.log('visiting %s', request.url);
+            // Access-Control-Allow-Origin allows browser to be accessed from other pages 
+        response.writeHead(200,{
+           'content-type' : 'application/json',
+           ' Access-Control-Allow-Origin' : '*'
 
-	     },
-	      '/actors' : function (request,response){
 
-	    console.log('visiting %s', request.url);
-	    response.end('this is the actors path');
 
-	     },
+        });
+
+
+
+	    response.end(JSON.stringify(message));
+
+	    //  },
+	    //  '/movies' : function (request,response){
+
+	    // console.log('visiting %s', request.url);
+	    // response.end('this is the movies path');
+
+	    //  },
+	    //   '/actors' : function (request,response){
+
+	    // console.log('visiting %s', request.url);
+	    // response.end('this is the actors path');
+
+	     }
 
 
 	   })
