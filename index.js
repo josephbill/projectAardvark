@@ -31,8 +31,6 @@ var movieSchema = mongoose.Schema({
    year_of_release: Number,
    category: String
 
-
-
 });
  //compile our model
  //informs mongodb available
@@ -41,10 +39,6 @@ var Movie = mongoose.model('Movie' , movieSchema);
 //adding the middleware
   app.use(bodyParser.urlencoded({extended: true}));
 
-
-
-
-  
 
 //routing using express easy
 app.get('/movies', function(req, res){
