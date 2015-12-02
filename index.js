@@ -297,10 +297,18 @@ if(err){
 
       // // console.log('visiting %s', request.url);
       // // response.end('this is the actors path');
-
+app.get('/movies/:id', function(req, res) {
+  movieId = req.params.id;
       
 
+//retrieve data from the mongodb
+Movie.findById(movieId, function (err, movie) {
+   if(err) return console.log(err);
 
+
+res.json(movie);
+});
+});
 
 
 
