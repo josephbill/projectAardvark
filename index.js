@@ -1,16 +1,15 @@
-var http = require('http');
-var dispatch = require('dispatch');
-var querystring = require('querystring');
+
 
 //Including Express
 var express = require('express');
 var app = express();
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
+
 //including express middleware
 //body-parser 
 var bodyParser = require('body-parser');
