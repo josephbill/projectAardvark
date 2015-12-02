@@ -1,1 +1,1 @@
-readMe.md
+Movie and movies are models 
