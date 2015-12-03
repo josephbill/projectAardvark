@@ -1,5 +1,7 @@
 //Including Express
 var express = require('express');
+//including consolidate 
+var cons = require('consolidate');
 var app = express();
 
 // app.use(function(req, res, next) {
@@ -16,6 +18,7 @@ var bodyParser = require('body-parser');
 
 
 //include mongoose 
+//mongoose allows validation of entries in database 
 var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/project-aardvark');
@@ -40,32 +43,42 @@ var movieSchema = mongoose.Schema({
 //informs mongodb available
 var Movie = mongoose.model('Movie', movieSchema);
 
-//adding the middleware
+//express settings
+//intiates template engines  
+app.engine('html', cons.liquid);
+//including jade templating engine 
+//the first code puts the path of the jade file
+app.set('views', './views');
+//initiates jade template engine 
+//app.set('view engine', 'jade');
+app.set('view engine' , 'html')
+//(express)adding the middleware
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
 
 //routing using express easy
+//adding jade template 
 app.get('/movies', function(req, res) {
-    Movie.find(function(err, movies) {
-        if (err) {
+    //the following code directs filter actions 
+    Movie.find()
+        .select('title year_of_release rating')
+        .exec(function(err, movies) {
+            if (err) {
 
 
-            console.log(err);
+                console.log(err);
 
-        } else {
+            } else {
 
-
-            res.json(movies);
-
-
-        }
-
-
-    });
+                res.render('index', {'movies': movies});
+            }
+        });
 
 });
+//res.json(movies);
+
 
 // movies =[ 
 // {
@@ -339,22 +352,24 @@ app.put('/movies/:id', function(req, res) {
 
 //delete verb .... to delete data from the database
 
-app.delete('/movies/:id', function(req, res){
-  movieId = req.params.id;
+app.delete('/movies/:id', function(req, res) {
+    movieId = req.params.id;
 
-  //removing data
-  Movie.remove({_id: movieId}, function(err){
-    if (err) return console.log(err);
-
-
-    res.send('Movie was deleted :-)');
-
+    //removing data
+    Movie.remove({
+        _id: movieId
+    }, function(err) {
+        if (err) return console.log(err);
 
 
+        res.send('Movie was deleted :-)');
 
 
-  });
-  });
+
+
+
+    });
+});
 
 
 

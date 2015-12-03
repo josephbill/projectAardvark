@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>LIQUID</title>
+</head>
+
+<body>
+    <h1>SPONGE BOB SQUARE PANTS</h1>
+    <table>
+        <thead>
+          
+                <th>Title</th>
+                <th>Year of Release</th>
+                <th>Rating</th>
+              <tbody>
+            {% for movie in movies %}
+            <tr>
+                <td>{{ movie.title}}</td>
+                <td>{{movie.year_of_release}}</td>
+                <td>{{movie.rating}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </thead>
+    </table>
+</body>
+
+</html>
