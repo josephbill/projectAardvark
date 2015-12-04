@@ -14,12 +14,15 @@
                 <th>Year of Release</th>
                 <th>Rating</th>
               <tbody>
+<!--here the movie name to the right defines the db and the movies name to the left is array of ur movie collection -->
             {% for movie in movies %}
             <tr>
-                <td>{{ movie.title}}</td>
+            <!--for file to be viewed as a link define path as in line 20 -->
+                <td><a href="/movies/{{ movie._id }}">{{ movie.title}}</td>
                 <td>{{movie.year_of_release}}</td>
                 <td>{{movie.rating}}</td>
             </tr>
+            <!--end loop -->
             {% endfor %}
             </tbody>
         </thead>

@@ -325,8 +325,8 @@ app.get('/movies/:id', function(req, res) {
     Movie.findById(movieId, function(err, movie) {
         if (err) return console.log(err);
 
-
-        res.json(movie);
+   res.render('detail' , {"movie" : movie });
+        //res.json(movie);
     });
 });
 
