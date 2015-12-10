@@ -6,11 +6,12 @@
 </head>
 
 <body>
-<header >ENTER MOVIE</header>
-<br>
+ {% include 'navbar' %}
+    <header>ENTER MOVIE</header>
+    <br>
     <div>
-    <!-- at the action is where you select route for the information posted on the form -->
-        <form class="col-sm-12" action="/movies" method="post" >
+        <!-- at the action is where you select route for the information posted on the form -->
+        <form class="col-sm-12" action="/movies" method="post">
             <div class="form-group">
                 <input type="text" name="title" class="form-control" placeholder="title">
             </div>
@@ -20,7 +21,6 @@
             </div>
             <br>
             <div class="form-group">
-                
                 <!--combobox/dropdown-->
                 <select class="form-control" name="category">
                     <option>Comedy</option>

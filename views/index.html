@@ -2,10 +2,11 @@
 <html>
 
 <head>
-    <title>LIQUID</title>
+    <title>Movies</title>
 </head>
 
 <body>
+{% include 'navbar' %}
     <h1>SPONGE BOB SQUARE PANTS</h1>
     <table>
         <thead>
@@ -18,9 +19,10 @@
             {% for movie in movies %}
             <tr>
             <!--for file to be viewed as a link define path as in line 20 -->
-                <td><a href="/movies/{{ movie._id }}">{{ movie.title}}</td>
+                <td><a href="/movies/{{ movie._id }}" target="_blank">{{ movie.title}}</td>
                 <td>{{movie.year_of_release}}</td>
                 <td>{{movie.rating}}</td>
+         
             </tr>
             <!--end loop -->
             {% endfor %}

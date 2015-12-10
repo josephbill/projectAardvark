@@ -3,11 +3,11 @@ var express = require('express');
 //including consolidate 
 var cons = require('consolidate');
 var app = express();
-
+//allowing cross origin resource sharing 
 // app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
 // });
 
 //including express middleware
@@ -28,7 +28,7 @@ mongoose.connect('mongodb://localhost/project-aardvark');
 //here at the schema is where you add fields and their rules for your databases
 var movieSchema = mongoose.Schema({
     title: String,
-    // year_of_release: Number,
+    year_of_release: Number,
     category: String,
     rating: {
         type: Number,
@@ -37,6 +37,7 @@ var movieSchema = mongoose.Schema({
         max: 10
 
     }
+
 
 });
 //compile our model
@@ -51,20 +52,15 @@ app.engine('html', cons.liquid);
 app.set('views', './views');
 //initiates jade template engine 
 //app.set('view engine', 'jade');
-app.set('view engine' , 'html')
-//(express)adding the middleware
+app.set('view engine', 'html')
+    //(express)adding the middleware
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+// app.use(bodyParser.json());
 
 
-//new route this get request handles post request
-//the code below allows user to get posted movies
-app.get('/movies/new', function(req, res) {
-    
 
-                res.render('new');
-            });
 
 //routing using express easy
 //adding jade template 
@@ -79,16 +75,22 @@ app.get('/movies', function(req, res) {
                 console.log(err);
 
             } else {
-
-                res.render('index', {'movies': movies});
+                // res.json(movies);
+                 res.render('index', {'movies': movies});
             }
         });
 
 });
 //res.json(movies);
 
-    
 
+// //new route this get request handles post request
+// //the code below allows user to get posted movies
+app.get('/movies/new', function(req, res) {
+
+
+    res.render('new');
+});
 
 
 
@@ -133,50 +135,115 @@ app.get('/movies/:id', function(req, res) {
     Movie.findById(movieId, function(err, movie) {
         if (err) return console.log(err);
 
-   res.render('detail' , {"movie" : movie });
-        //res.json(movie);
+        res.render('detail', {
+            "movie": movie
+        });
+        // res.json(movie);
+    });
+});
+
+
+app.get('/movies/:id/edit', function(req, res) {
+    movieId = req.params.id;
+
+    // retrieve the movie from Mongodb
+    Movie.findById(movieId, function(err, movie) {
+        if (err) return console.log(err);
+        res.render('edit', {
+            "movie": movie
+        });
+        // res.json(movie);
     });
 });
 
 
 //put verb....... updating data from the database
-app.put('/movies/:id', function(req, res) {
-    movieId = req.params.id;
-    userRating = req.body.rating;
+// app.put('/movies/:id', function(req, res) {
+//     movieId = req.params.id;
+//     userRating = req.body.rating;
 
-    //retrieve data from the mongodb
+//     //retrieve data from the mongodb
+//     Movie.findById(movieId, function(err, movie) {
+//         if (err) return console.log(err);
+//         movie.rating = userRating;
+//         movie.save(function(err, movie) {
+//             if (err) return console.log(err);
+//             res.json(movie);
+//         });
+
+
+//     });
+// });
+
+function updateMovie(method, req, res) {
+    movieId = req.params.id;
+
+    userRating = req.body.rating;
+    userTitle = req.body.title;
+    userYearOfRelease = req.body.year_of_release;
+   
+
+    // retrieve the movie from Mongodb
     Movie.findById(movieId, function(err, movie) {
         if (err) return console.log(err);
+
         movie.rating = userRating;
+        movie.title = userTitle;
+        movie.year_of_release = userYearOfRelease;
+       
+
         movie.save(function(err, movie) {
             if (err) return console.log(err);
-            res.json(movie);
+
+            if (method === 'PUT') {
+                res.json(movie);
+            } else {
+                res.redirect('/movies/' + movie._id);
+            };
         });
-
-
     });
+}
+
+
+
+app.post('/movies/:id/edit', function(req, res) {
+
+    updateMovie('POST', req, res);
 });
 
+app.put('/movies/:id', function(req, res) {
+    updateMovie('PUT', req, res);
+});
 
-//delete verb .... to delete data from the database
-
-app.delete('/movies/:id', function(req, res) {
+function deleteMovie(method, req, res) {
     movieId = req.params.id;
 
-    //removing data
+    // retrieve the movie from Mongodb
     Movie.remove({
         _id: movieId
     }, function(err) {
         if (err) return console.log(err);
 
-
-        res.send('Movie was deleted :-)');
-
-
-
-
-
+        if (method === 'GET') {
+            res.redirect('/movies');
+        } else {
+            res.send('Movie was deleted');
+        };
     });
+}
+
+app.get('/movies/:id/delete', function(req, res) {
+    deleteMovie('GET', req, res);
+});
+
+
+
+
+
+
+//delete verb .... to delete data from the database
+app.delete('/movies/:id', function(req, res) {
+    deleteMovie('DELETE', req, res);
 });
 
 
