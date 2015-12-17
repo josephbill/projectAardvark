@@ -16,7 +16,20 @@ var bodyParser = require('body-parser');
 
 //Include Mongoose
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/project-aardvark');
+var uristring =
+process.env.MONGOLAB_URI ||
+process.env.MONGOLAB_URL ||
+'mongolab://localhost/project-aardvark';
+
+
+mongoose.connect(uristring, function(err){
+
+  if(err) {
+
+  	console.log('error connecting to: ' , uristring);
+
+  }
+});
 
 //Allow CORS
 app.use(function(req, res, next) {
